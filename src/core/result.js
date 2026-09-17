@@ -37,8 +37,12 @@ export const MODE_ORDER = Object.freeze(['research', 'moon-loop', 'playground'])
 export const SHARED_QUANTITY = 'collision centre-of-mass energy √s';
 export const SHARED_UNIT = 'GeV';
 
-/** A value of null means the framework makes no prediction for this quantity. */
-export function resultCore({ mode, quantity, value, unit, uncertainty = null, byproducts = [], note = '' }) {
+/**
+ * A value of null means the framework makes no prediction for this quantity.
+ * `checks` is part of the shape for every mode (empty where there is nothing
+ * to check), so the compare table never has to special-case a mode.
+ */
+export function resultCore({ mode, quantity, value, unit, uncertainty = null, byproducts = [], checks = [], note = '' }) {
   const entry = MODES[mode];
   if (!entry) throw new RangeError(`Unknown mode: ${mode}`);
   if (!quantity) throw new RangeError('A core result needs a named quantity.');
@@ -54,6 +58,7 @@ export function resultCore({ mode, quantity, value, unit, uncertainty = null, by
     unit,
     uncertainty,
     byproducts: Object.freeze(byproducts.map(b => Object.freeze({ ...b }))),
+    checks: Object.freeze(checks.map(c => Object.freeze({ ...c }))),
     note
   });
 }

@@ -11,3 +11,8 @@
 table{border-collapse:collapse;width:100%;font-size:.85rem}
 th,td{text-align:left;padding:.35rem .5rem;border-bottom:1px solid #ddd}
 tr.active{background:#f4f4f4}
+h3.checksTitle{font-size:.9rem;margin:.9rem 0 .3rem;opacity:.85}
+table.checks{font-size:.78rem;margin:.3rem 0}
+table.checks th{color:var(--muted);font-weight:600}
+ul.checkNotes{font-size:.75rem;opacity:.8;margin:.4rem 0 0}
+ul.checkNotes small{display:block;opacity:.7;font-size:.72rem}

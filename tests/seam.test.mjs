@@ -14,7 +14,7 @@ const input = Object.freeze({
 });
 
 test('every mode returns the same core shape', () => {
-  const keys = ['mode','modeName','framework','claim','quantity','value','unit','uncertainty','byproducts','note'];
+  const keys = ['mode','modeName','framework','claim','quantity','value','unit','uncertainty','byproducts','checks','note'];
   for (const { core } of compareModes(input)) {
     assert.deepEqual(Object.keys(core), keys);
     assert.equal(core.quantity, SHARED_QUANTITY);

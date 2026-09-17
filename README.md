@@ -41,11 +41,12 @@ Keep units explicit, cite/describe assumptions, add tests, and preserve the dire
 Every mode now returns the same `core` object for the same run:
 
 ```
-{ mode, modeName, framework, claim, quantity, value, unit, uncertainty, byproducts, note }
+{ mode, modeName, framework, claim, quantity, value, unit, uncertainty, byproducts, checks, note }
 ```
 
 - `claim` is read from the mode registry in `src/core/result.js`, never passed in by a caller, so a script cannot relabel its own output as established physics.
 - `value: null` means the framework makes no prediction for that quantity. It is a real answer, never scored as agreement.
+- `checks` is the Mode 1 audit bench: the simulator's own numbers placed next to machines that exist. It is empty for modes that have nothing to check, so the shape never varies.
 - `compareModes(input)` puts all three cores side by side. The UI shows the same table.
 
 Honest limit, stated in code and here: a collider at any reachable energy cannot probe a bounce at Planckian density. The Moon-Loop mode therefore reports **no prediction** for collider √s and separately evaluates the published effective modified Friedmann equation it reduces to, labeled `derived` and cited:
@@ -53,6 +54,17 @@ Honest limit, stated in code and here: a collider at any reachable energy cannot
 > A. Ashtekar, T. Pawlowski, P. Singh, *Quantum Nature of the Big Bang: Improved dynamics*, Phys. Rev. Lett. **96**, 141301 (2006).
 
 Reproducing a published equation is a connection, not evidence for a mechanism.
+
+## Mode 1 against real machines (added 2026-09-17)
+
+Mode 1 is `W = qEL` over a uniform field with no losses. That is a real equation and a lie about how accelerators work, so every Research Lab core result now carries an audit against a published machine (LHC or LEP 2, selected in the UI). Divergences are shown, not smoothed:
+
+- **Beam energy.** The simulator's integrated value next to the machine's published beam energy, with the ratio. The two disagree because a ring sets energy by magnetic rigidity, not by field times circumference. Agreement would be an accident.
+- **Magnetic rigidity ceiling.** `p = 0.299792458 * B * rho` from the machine's published dipole field and bending radius. LHC: 8.33 T, 2803.95 m -> 7002 GeV, against 7000 GeV design. This is the relationship the simulator does not model.
+- **Synchrotron loss per turn.** The simulator assumes zero. `U0 = (e^2 / 3 eps0) * gamma^4 / rho` gives ~5.9 keV/turn for LHC protons at 6.8 TeV and ~3.4 GeV/turn for LEP 2 electrons at 104.5 GeV, in the same 26.7 km tunnel. Same ring, 13 orders of magnitude apart, because the loss scales as E^4 and inversely with mass^4.
+- **Power radiated by the beam.** The machine's radiated power next to the simulator's required power, so the lossless lower bound is visible for what it is.
+
+Sources are named per check (CERN LHC Design Report CERN-2004-003; CERN Run 3 parameters; LEP 2 operation; the standard synchrotron-radiation formula). Nothing is invented to make the simulator look right, and nothing is invented to make it look wrong.
 
 ## Running it
 

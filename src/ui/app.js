@@ -13,6 +13,7 @@ function input() {
     verticalLengthM: milesToMeters(+$('length').value),
     log10BeamRate: +$('rate').value,
     geometry: $('geometry').value,
+    referenceMachine: $('machine').value,
     useIdealizedHelix: $('helix').checked,
     helixTurns: +$('turns').value,
     helixRadiusM: +$('radius').value,
@@ -26,6 +27,7 @@ function coreHtml(core) {
   const value = core.value === null ? '<b class="none">NO PREDICTION</b>' : `<b>${fmt(core.value)} ${core.unit}</b>`;
   const unc = core.uncertainty === null ? '' : `<small>± ${fmt(core.uncertainty)} ${core.unit}</small>`;
   const by = core.byproducts.map(b => `<li>${b.name}: ${fmt(b.value)} ${b.unit}</li>`).join('');
+  const checks = (core.checks ?? []).length ? `<h3>Checked against published machines</h3><table class="checks"><thead><tr><th>Quantity</th><th>This run</th><th>Published</th><th>Divergence</th></tr></thead><tbody>${core.checks.map(c => `<tr><td>${c.name}</td><td>${fmt(c.simulated)} ${c.unit}</td><td>${fmt(c.published)} ${c.unit}</td><td>${c.divergenceFactor === null ? '<span class="none">not a ratio</span>' : fmt(c.divergenceFactor, 4) + '\u00d7'}</td></tr>`).join('')}</tbody></table><ul class="checkNotes">${core.checks.map(c => `<li><b>${c.name}:</b> ${c.verdict}. ${c.note}<small> ${c.sources.join(' ')}</small></li>`).join('')}</ul>` : '';
   return `<div class="core">
     <p class="claim ${core.claim.replaceAll(' ', '-')}">claim: ${core.claim}</p>
     <p class="q">${core.quantity}</p>
@@ -33,6 +35,7 @@ function coreHtml(core) {
     <p class="fw">${core.framework}</p>
     <p class="nt">${core.note}</p>
     ${by ? `<ul class="bp">${by}</ul>` : ''}
+    ${checks}
   </div>`;
 }
 
@@ -77,8 +80,7 @@ function render() {
 }
 function cosmoCitation() { return 'Moon-Loop effective equation: Ashtekar, Pawlowski, Singh, PRL 96, 141301 (2006).'; }
 
-for (const el of document.querySelectorAll('input,select')) el.addEventListener('input', render);
-for (const el of document.querySelectorAll('button[data-mode]')) el.addEventListener('click', () => {
+for (const el of document.querySelectorAll('input,select')) el.addEventListener('input', render);for (const el of document.querySelectorAll('button[data-mode]')) el.addEventListener('click', () => {
   mode = el.dataset.mode;
   document.querySelectorAll('button[data-mode]').forEach(x => x.classList.toggle('active', x === el));
   $('mode-description').textContent = mode === 'research' ? 'Established special-relativistic kinematics' : mode === 'moon-loop' ? 'Same baseline + explicit hypothesis tests' : 'Same baseline + labeled game mechanics';
