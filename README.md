@@ -35,3 +35,30 @@ Basic operation is local and does not require credentials. Do not commit API key
 ## Contributions
 
 Keep units explicit, cite/describe assumptions, add tests, and preserve the direction `shared core → Moon-Loop/Playground`. Fiction and hypothesis controls must never alter the authoritative Research Lab result.
+
+## The physics seam (added 2026-09-17)
+
+Every mode now returns the same `core` object for the same run:
+
+```
+{ mode, modeName, framework, claim, quantity, value, unit, uncertainty, byproducts, note }
+```
+
+- `claim` is read from the mode registry in `src/core/result.js`, never passed in by a caller, so a script cannot relabel its own output as established physics.
+- `value: null` means the framework makes no prediction for that quantity. It is a real answer, never scored as agreement.
+- `compareModes(input)` puts all three cores side by side. The UI shows the same table.
+
+Honest limit, stated in code and here: a collider at any reachable energy cannot probe a bounce at Planckian density. The Moon-Loop mode therefore reports **no prediction** for collider √s and separately evaluates the published effective modified Friedmann equation it reduces to, labeled `derived` and cited:
+
+> A. Ashtekar, T. Pawlowski, P. Singh, *Quantum Nature of the Big Bang: Improved dynamics*, Phys. Rev. Lett. **96**, 141301 (2006).
+
+Reproducing a published equation is a connection, not evidence for a mechanism.
+
+## Running it
+
+```sh
+npm start      # zero dependencies, node built-in server, prints http://localhost:5173
+npm test       # node --test, no install either
+```
+
+Double-clicking `index.html` does **not** work: browsers block ES modules loaded from `file://` (origin `null`). That is a browser rule, not a bug in this project, and it is why `npm start` exists.
