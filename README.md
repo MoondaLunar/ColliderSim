@@ -3,18 +3,19 @@
 ColliderSim is a local, no-install collider-learning prototype with a single shared physics core and three deliberately separated modes:
 
 - **Research Lab** — documented special-relativistic acceleration, beam power, and head-on/fixed-target kinematics. It does **not** yet claim an event generator, detector, trigger, reconstruction, cross sections, or a Standard Model Monte Carlo.
-- **Moon-Loop Experimental** — the exact Research Lab result plus a hypothesis test-bed. Missing microscopic physics is reported as `INCONCLUSIVE` or `NOT YET DEFINED BY THE HYPOTHESIS`; it cannot silently turn into a success.
+- **Moon-Loop Experimental** — a hypothesis test-bed that reports **no prediction** for collider √s rather than borrowing the Research Lab value, and evaluates the hypothesis on its own terms. Missing microscopic physics is reported as `INCONCLUSIVE` or `NOT YET DEFINED BY THE HYPOTHESIS`; it cannot silently turn into a success.
 - **Collider Playground** — friendly explanations and silly game cards over the same unmodified standard result. Every fictional effect has a “what’s real” explanation.
 
 ## Run locally
 
-Open `index.html` in a modern browser. Everything required for the interactive lab is checked in and it makes no network requests.
-
-If Node.js is installed, run tests with:
-
 ```sh
-npm test
+npm start      # zero dependencies, node built-in server, prints http://localhost:5173
+npm test       # node --test, no install either
 ```
+
+Everything required for the interactive lab is checked in and it makes no network requests.
+
+Double-clicking `index.html` does **not** work: browsers block ES modules loaded from `file://` (origin `null`). That is a browser rule, not a bug in this project, and it is why `npm start` exists.
 
 ## Architecture
 
@@ -68,9 +69,4 @@ Sources are named per check (CERN LHC Design Report CERN-2004-003; CERN Run 3 pa
 
 ## Running it
 
-```sh
-npm start      # zero dependencies, node built-in server, prints http://localhost:5173
-npm test       # node --test, no install either
-```
-
-Double-clicking `index.html` does **not** work: browsers block ES modules loaded from `file://` (origin `null`). That is a browser rule, not a bug in this project, and it is why `npm start` exists.
+See **Run locally** above. `npm start` is the one command; `npm test` runs the suite.
